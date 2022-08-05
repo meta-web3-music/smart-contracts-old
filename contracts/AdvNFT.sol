@@ -100,6 +100,7 @@ contract AdvNFT is Context, ERC721Burnable, ERC721Pausable {
         uint256 advNftId = _musicIdToAdvId[musicTokenId];
         AdvNft memory advNft = _advIdToAdv[advNftId];
         require(
+            // expiration time is 0 when it is not transferred and therefore not used yet
             // expiration duration is 0 only when the mapping is null since we don't allow duration 0
             advNft.expirationDuration == 0 ||
                 (advNft.expirationTime != 0 &&
@@ -224,27 +225,20 @@ contract AdvNFT is Context, ERC721Burnable, ERC721Pausable {
             super._beforeTokenTransfer(from, to, tokenId);
             return;
         }
+
         AdvNft memory advNft = _advIdToAdv[tokenId];
         // Expire the token if it is being burn
         if (to == address(0)) {
             if (advNft.expirationTime > block.timestamp) {
-                _advIdToAdv[tokenId].expirationTime = 0;
+                // Set to 1 since 0 means it is not used (transferred) yet
+                _advIdToAdv[tokenId].expirationTime = 1;
             }
             super._beforeTokenTransfer(from, to, tokenId);
             return;
         }
 
-        // If token has expirationTime already initlized then it is used and cannot transfer to any other address, instead can be approved to other address if needed
-        require(advNft.expirationTime == 0, "cannot transfer used Adspace");
-
-        // Check if the token is being placed at marketplace or it is being sold to another account
-        require(
-            to == marketplaceAddress || from == marketplaceAddress,
-            "token can be transferred only from or to marketplace"
-        );
-
-        // Set expiration time when there is market sale
-        if (from == marketplaceAddress && to != advNft.creator) {
+        // Set expiration time when it is trasnferred
+        if (advNft.expirationTime == 0) {
             _advIdToAdv[tokenId].expirationTime =
                 block.timestamp +
                 advNft.expirationDuration;

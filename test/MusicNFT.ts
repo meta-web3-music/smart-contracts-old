@@ -83,13 +83,9 @@ describe("musicNFT contract", () => {
             .to.be.revertedWith("Adspace is not expired yet")
     })
 
-    it("Should should initialize duration after market sale", async () => {
+    it("Should initialize duration after market sale", async () => {
         await expect(
-            advNFT.connect(randomMarketplace).transferFrom(creator.getAddress(), randomMarketplace.getAddress(), 1)
-        )
-
-        await expect(
-            advNFT.connect(randomMarketplace).transferFrom(randomMarketplace.getAddress(), advBuyer.getAddress(), 1)
+            advNFT.connect(randomMarketplace).transferFrom(creator.getAddress(), advBuyer.getAddress(), 1)
         )
     })
 
