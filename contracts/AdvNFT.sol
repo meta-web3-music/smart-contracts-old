@@ -5,8 +5,6 @@ import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 import "@openzeppelin/contracts/token/ERC721/extensions/ERC721Burnable.sol";
 import "@openzeppelin/contracts/token/ERC721/extensions/ERC721Pausable.sol";
 
-// TODO: tokenMetadataURI, tokenURI
-// TODO: add token uri func and append ipfs://
 contract AdvNFT is Context, ERC721Burnable, ERC721Pausable {
     using Counters for Counters.Counter;
     address public nftContractAddr;
@@ -26,7 +24,8 @@ contract AdvNFT is Context, ERC721Burnable, ERC721Pausable {
     }
 
     struct AdvNft {
-        string metaDataUri;
+        string metaDataHash;
+        string assetHash;
         uint32 expirationDuration;
         uint256 expirationTime;
         address creator;
@@ -34,10 +33,14 @@ contract AdvNFT is Context, ERC721Burnable, ERC721Pausable {
     address public admin;
     address public marketplaceAddress;
     event AdvNFTCreated(
+        string metaDataHash,
+        string assetHash,
         uint256 tokenID,
-        address indexed creator,
-        string metaDataUri
+        uint32 expirationDuration,
+        uint256 musicNFTId
     );
+
+    event AdvNFTHashUpdated(uint256 tokenId, string metaHash, string assetHash);
 
     using Strings for uint256;
 
@@ -113,6 +116,7 @@ contract AdvNFT is Context, ERC721Burnable, ERC721Pausable {
     function createAdSpace(
         uint256 musicNFTId,
         string memory metadataHash,
+        string memory assetHash,
         uint32 expirationDuration
     ) public returns (uint256) {
         return
@@ -120,6 +124,7 @@ contract AdvNFT is Context, ERC721Burnable, ERC721Pausable {
                 _msgSender(),
                 musicNFTId,
                 metadataHash,
+                assetHash,
                 expirationDuration
             );
     }
@@ -128,16 +133,24 @@ contract AdvNFT is Context, ERC721Burnable, ERC721Pausable {
         address owner,
         uint256 musicNFTId,
         string memory metadataHash,
+        string memory assetHash,
         uint32 expirationDuration
     ) public onlyMusicNFT returns (uint256) {
         return
-            _createAdSpace(owner, musicNFTId, metadataHash, expirationDuration);
+            _createAdSpace(
+                owner,
+                musicNFTId,
+                metadataHash,
+                assetHash,
+                expirationDuration
+            );
     }
 
     function _createAdSpace(
         address owner,
         uint256 musicNFTId,
         string memory metadataHash,
+        string memory assetHash,
         uint32 _expirationDuration
     )
         internal
@@ -162,17 +175,24 @@ contract AdvNFT is Context, ERC721Burnable, ERC721Pausable {
 
         _musicIdToAdvId[musicNFTId] = currentTokenID;
 
-        _advIdToAdv[currentTokenID].metaDataUri = metadataHash;
+        _advIdToAdv[currentTokenID].metaDataHash = metadataHash;
+        _advIdToAdv[currentTokenID].assetHash = assetHash;
         _advIdToAdv[currentTokenID].creator = owner;
         _advIdToAdv[currentTokenID].expirationDuration = _expirationDuration;
 
         _setApprovalForAll(owner, marketplaceAddress, true);
 
-        emit AdvNFTCreated(currentTokenID, owner, tokenURI(currentTokenID));
+        emit AdvNFTCreated(
+            metadataHash,
+            assetHash,
+            currentTokenID,
+            _expirationDuration,
+            musicNFTId
+        );
         return currentTokenID;
     }
 
-    function getCurrentAdvMetaDataUri(uint256 musicNFTId)
+    function getCurrentAdvAssetUri(uint256 musicNFTId)
         external
         view
         returns (string memory)
@@ -180,7 +200,19 @@ contract AdvNFT is Context, ERC721Burnable, ERC721Pausable {
         uint256 advNFTid = _musicIdToAdvId[musicNFTId];
         AdvNft memory advNFT = _advIdToAdv[advNFTid];
         require(block.timestamp <= advNFT.expirationTime, "AdvNFT has expired");
-        return advNFT.metaDataUri;
+        return tokenMetadataURI(advNFTid);
+    }
+
+    function tokenMetadataURI(uint256 tokenId)
+        public
+        view
+        virtual
+        returns (string memory)
+    {
+        require(_exists(tokenId), "Non-Existent NFT");
+        string memory _metaDataHash = _advIdToAdv[tokenId].metaDataHash;
+        bytes memory ipfsPrefixed = abi.encodePacked("ipfs://", _metaDataHash);
+        return string(ipfsPrefixed);
     }
 
     function tokenURI(uint256 tokenId)
@@ -191,9 +223,9 @@ contract AdvNFT is Context, ERC721Burnable, ERC721Pausable {
         returns (string memory)
     {
         require(_exists(tokenId), "Non-Existent NFT");
-        string memory _tokenURI = _advIdToAdv[tokenId].metaDataUri;
-
-        return _tokenURI;
+        string memory _assetHash = _advIdToAdv[tokenId].assetHash;
+        bytes memory ipfsPrefixed = abi.encodePacked("ipfs://", _assetHash);
+        return string(ipfsPrefixed);
     }
 
     function pause() public onlyAdmin {
@@ -204,14 +236,17 @@ contract AdvNFT is Context, ERC721Burnable, ERC721Pausable {
         _unpause();
     }
 
-    function updateMetaDatUri(uint256 tokenId, string memory _metaDataUri)
-        external
-    {
+    function updateHash(
+        uint256 tokenId,
+        string memory _metaDataHash,
+        string memory _dataHash
+    ) external {
         require(
             _isApprovedOrOwner(_msgSender(), tokenId),
             "sender is not approved nor owner of token"
         );
-        _advIdToAdv[tokenId].metaDataUri = _metaDataUri;
+        _advIdToAdv[tokenId].metaDataHash = _metaDataHash;
+        emit AdvNFTHashUpdated(tokenId, _metaDataHash, _dataHash);
     }
 
     //Some checks to avoid token being transfer to other marketplace where it is not possible to detect sale and therefore not possible to initilize expirationTime

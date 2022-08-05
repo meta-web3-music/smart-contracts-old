@@ -12,17 +12,24 @@ contract MusicNFT is Context, ERC721Pausable {
     using Counters for Counters.Counter;
 
     address public advNFTAddr;
+    string public baseURI = "ipfs://";
 
     Counters.Counter private _tokenIdTracker;
 
     // Optional mapping for token URIs
-    mapping(uint256 => string) private _tokenURIs;
+    mapping(uint256 => TokenHashs) private _tokenHashes;
+
+    struct TokenHashs {
+        string metaDataHash;
+        string assetHash;
+    }
 
     address public admin;
     event MusicNFTCreated(
         uint256 tokenID,
         address indexed creator,
-        string metaDataUri
+        string metaDataHash,
+        string assetHash
     );
 
     using Strings for uint256;
@@ -41,41 +48,54 @@ contract MusicNFT is Context, ERC721Pausable {
         _;
     }
 
-    function createMusic(string memory metadataHash) public returns (uint256) {
-        uint256 tokenId = _createMusic(_msgSender(), metadataHash);
-        return tokenId;
-    }
-
-    function _createMusic(address creator, string memory metadataHash)
-        internal
+    function createMusic(string memory metadataHash, string memory assetHash)
+        public
         returns (uint256)
     {
-        console.log(creator);
         _tokenIdTracker.increment();
         uint256 currentTokenID = _tokenIdTracker.current();
-        _safeMint(creator, currentTokenID);
-        _setTokenURI(currentTokenID, metadataHash);
+        _safeMint(_msgSender(), currentTokenID);
+        _setTokenHash(currentTokenID, metadataHash, assetHash);
 
-        emit MusicNFTCreated(currentTokenID, creator, tokenURI(currentTokenID));
+        emit MusicNFTCreated(
+            currentTokenID,
+            _msgSender(),
+            metadataHash,
+            assetHash
+        );
         return currentTokenID;
     }
 
     function createMusicWithAdv(
         string memory musicMetadataHash,
+        string memory musicAssetHash,
         string memory advMetadataHash,
+        string memory advAssetHash,
         uint32 advExpirationDuration
     ) public returns (uint256) {
-        console.log(_msgSender());
         AdvNFT advNFt = AdvNFT(advNFTAddr);
-        uint256 tokenId = _createMusic(_msgSender(), musicMetadataHash);
+        uint256 tokenId = createMusic(musicMetadataHash, musicAssetHash);
         advNFt._musicNFTCreateAdSpace(
             _msgSender(),
             tokenId,
             advMetadataHash,
+            advAssetHash,
             advExpirationDuration
         );
 
         return tokenId;
+    }
+
+    function tokenMetadataURI(uint256 tokenId)
+        public
+        view
+        virtual
+        returns (string memory)
+    {
+        require(_exists(tokenId), "Non-Existent NFT");
+        string memory _tokenHash = _tokenHashes[tokenId].metaDataHash;
+        bytes memory ipfsPrefixed = abi.encodePacked("ipfs://", _tokenHash);
+        return string(ipfsPrefixed);
     }
 
     function tokenURI(uint256 tokenId)
@@ -86,17 +106,19 @@ contract MusicNFT is Context, ERC721Pausable {
         returns (string memory)
     {
         require(_exists(tokenId), "Non-Existent NFT");
-        string memory _tokenURI = _tokenURIs[tokenId];
-
-        return _tokenURI;
+        string memory _assetHash = _tokenHashes[tokenId].assetHash;
+        bytes memory ipfsPrefixed = abi.encodePacked("ipfs://", _assetHash);
+        return string(ipfsPrefixed);
     }
 
-    function _setTokenURI(uint256 tokenId, string memory _tokenURI)
-        internal
-        virtual
-    {
+    function _setTokenHash(
+        uint256 tokenId,
+        string memory _metaDataHash,
+        string memory _assetHash
+    ) internal virtual {
         require(_exists(tokenId), "Non-Existent NFT");
-        _tokenURIs[tokenId] = _tokenURI;
+        _tokenHashes[tokenId].metaDataHash = _metaDataHash;
+        _tokenHashes[tokenId].assetHash = _assetHash;
     }
 
     function pause() public onlyAdmin {

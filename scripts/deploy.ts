@@ -1,5 +1,7 @@
 import { ethers } from "hardhat";
-
+import yaml from "js-yaml"
+import fs from "fs"
+import hre from "hardhat"
 async function main() {
 
 
@@ -18,7 +20,23 @@ async function main() {
   await advNFT.setNftContractAddr(musicNFT.address).then(e => e.wait())
   console.log("ADVNft:", advNFT.address);
   console.log("MusicNFT:", musicNFT.address);
+  if (hre.network.name == "localhost") {
+    updateGraphAddress(advNFT.address, musicNFT.address, musicNFT.deployTransaction.blockNumber, true)
+  } else {
+    updateGraphAddress(advNFT.address, musicNFT.address, musicNFT.deployTransaction.blockNumber, false)
+  }
+}
+function updateGraphAddress(advNFTAddr: string, musicNFTAddr: string, startBlock: number | undefined, local: boolean) {
+  const urlSubgraphLocal = local ? `subgraph/subgraph.local.yaml` : `subgraph/subgraph.yaml`
+  const umlSubgraphLocal = yaml.load(fs.readFileSync(urlSubgraphLocal, 'utf8')) as any
+  umlSubgraphLocal.dataSources[0].source.address = advNFTAddr
+  umlSubgraphLocal.dataSources[1].source.address = musicNFTAddr
 
+  if (startBlock) {
+    umlSubgraphLocal.dataSources[0].source.startBlock = startBlock
+    umlSubgraphLocal.dataSources[1].source.startBlock = startBlock
+  }
+  fs.writeFileSync(urlSubgraphLocal, yaml.dump(umlSubgraphLocal));
 }
 
 // We recommend this pattern to be able to use async/await everywhere
