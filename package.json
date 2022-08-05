@@ -1,0 +1,16 @@
+{
+  "name": "hardhat-project",
+  "devDependencies": {
+    "@nomicfoundation/hardhat-toolbox": "^1.0.2",
+    "@openzeppelin/contracts": "^4.7.2",
+    "hardhat": "^2.10.1"
+  },
+  "scripts": {
+    "compile": "hardhat compile",
+    "test": "hardhat test",
+    "deploy:maticmum": "hardhat run scripts/deploy.ts --network maticmum",
+    "verify:maticmum": "npm run verify:adv:maticmum && npm run verify:music:maticmum",
+    "verify:adv:maticmum": "npx hardhat verify --network maticmum $ADV_ADDRESS AdvNFT ADV 0x909e9efE4D87d1a6018C2065aE642b6D0447bc91",
+    "verify:music:maticmum": "npx hardhat verify --network maticmum $MUSIC_ADDRESS MusicNFT MZK $ADV_ADDRESS"
+  }
+}
