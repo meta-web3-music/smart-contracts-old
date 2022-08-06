@@ -4,7 +4,7 @@ import {
   Transfer,
   AdvNFTHashUpdated
 } from "../generated/AdvNFT/AdvNFT"
-import { AdvNFT, MusicNFT } from "../generated/schema"
+import { AdvNFT, MusicNFT, User } from "../generated/schema"
 
 
 const tokenUriPrefix = "ipfs://"
@@ -22,7 +22,6 @@ export function handleAdvNFTCreated(event: AdvNFTCreated): void {
     advNft.expirationDuration = event.params.expirationDuration;
     advNft.metaDataHash = event.params.metaDataHash;
     advNft.assetHash = event.params.assetHash;
-    advNft.asks = [];
     advNft.save();
   } else {
     //TODO
@@ -42,10 +41,12 @@ export function handleAdvNFTHashUpdated(event: AdvNFTHashUpdated): void {
 }
 
 export function handleTransfer(event: Transfer): void {
+  const user = new User(event.params.to.toHexString())
   const advNft = AdvNFT.load(event.params.tokenId.toString())
   if (advNft) {
     advNft.owner = event.params.to.toHexString();
     advNft.expirationTime = event.block.timestamp.plus(BigInt.fromString(advNft.expirationDuration.toString()));
+    user.save();
     advNft.save();
   } else {
     //TODO

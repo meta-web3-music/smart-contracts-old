@@ -134,7 +134,17 @@ contract MusicNFT is Context, ERC721Pausable {
         address to,
         uint256 tokenId
     ) internal override {
-        require(from == address(0), "music is soul bound");
+        if (from == address(0)) {
+            super._beforeTokenTransfer(from, to, tokenId);
+            return;
+        }
+        AdvNFT advNft = AdvNFT(advNFTAddr);
+        bool isExpired = advNft.isExpired(tokenId);
+        require(
+            isExpired,
+            "associated AdvNFT should be expired before the music can be transferred"
+        );
+
         super._beforeTokenTransfer(from, to, tokenId);
     }
 }

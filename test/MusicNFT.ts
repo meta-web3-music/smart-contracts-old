@@ -5,9 +5,9 @@ import { AdvNFT, MusicNFT } from "../typechain-types"
 
 describe("musicNFT contract", () => {
 
-    let [owner, creator, randomMarketplace, randomSigner, advBuyer]: SignerWithAddress[] = new Array(5)
+    let [owner, creator, otherCreator, randomMarketplace, randomSigner, advBuyer]: SignerWithAddress[] = new Array(5)
     before(async () => {
-        [owner, creator, randomMarketplace, randomSigner, advBuyer] = await ethers.getSigners()
+        [owner, creator, otherCreator, randomMarketplace, randomSigner, advBuyer] = await ethers.getSigners()
     })
     let musicNFT: MusicNFT
     let advNFT: AdvNFT
@@ -50,11 +50,12 @@ describe("musicNFT contract", () => {
     })
 
 
-    it("Should not be able to transfer", async () => {
+    it("Should able to transfer", async () => {
         await expect(
-            musicNFT.connect(creator).transferFrom(await creator.getAddress(), await randomSigner.getAddress(), 1)
+            musicNFT.connect(creator).transferFrom(await creator.getAddress(), await otherCreator.getAddress(), 1)
         )
-            .to.be.revertedWith("music is soul bound")
+            .to.emit(musicNFT, "Transfer")
+            .withArgs(await creator.getAddress(), await otherCreator.getAddress(), 1)
     })
 
     const threeHours = 3 * 24 * 60 * 60
@@ -64,33 +65,39 @@ describe("musicNFT contract", () => {
 
     it("Should create ADV NFT", async () => {
         await expect(
-            advNFT.connect(creator).createAdSpace(1, advNFTMetaData, advAssetHash, threeHours)
+            advNFT.connect(otherCreator).createAdSpace(1, advNFTMetaData, advAssetHash, threeHours)
         )
             .to.emit(advNFT, "AdvNFTCreated")
             .withArgs(
                 advNFTMetaData, advAssetHash,
                 1, threeHours, 1)
     })
+
+    it("Should fail creating ADV NFT when existing hasn't expired", async () => {
+        await expect(
+            advNFT.connect(otherCreator).createAdSpace(1, advNFTMetaData, advAssetHash, threeHours)
+        )
+            .to.be.revertedWith("Adspace is not expired yet")
+    })
+
     it("Should create Music NFT with ADV NFT", async () => {
         await expect(
-            musicNFT.connect(creator).createMusicWithAdv(metaDataHash, advAssetHash, advNFTMetaData, advAssetHash, threeHours)
+            await musicNFT.connect(creator).createMusicWithAdv(metaDataHash, advAssetHash, advNFTMetaData, advAssetHash, threeHours)
         )
             .to.emit(advNFT, "AdvNFTCreated")
             .withArgs(advNFTMetaData, advAssetHash,
                 2, threeHours, 2)
     })
 
-    it("Should fail creating ADV NFT when one is already active", async () => {
+    it("Should fail transferring Music NFT when ADV NFT is already active", async () => {
         await expect(
-            advNFT.connect(creator).createAdSpace(1, advNFTMetaData, advAssetHash, threeHours)
+            musicNFT.connect(creator).transferFrom(creator.getAddress(), randomSigner.getAddress(), 2)
         )
-            .to.be.revertedWith("Adspace is not expired yet")
+            .to.be.revertedWith("associated AdvNFT should be expired before the music can be transferred")
     })
 
     it("Should initialize duration after market sale", async () => {
-        await expect(
-            advNFT.connect(randomMarketplace).transferFrom(creator.getAddress(), advBuyer.getAddress(), 1)
-        )
+        await advNFT.connect(randomMarketplace).transferFrom(otherCreator.getAddress(), advBuyer.getAddress(), 1)
     })
 
     it("Should expire ADV NFT after specified time", async () => {
@@ -103,6 +110,12 @@ describe("musicNFT contract", () => {
             advNFT.connect(creator).getCurrentAdvAssetUri(1)
         )
             .to.be.revertedWith("AdvNFT has expired")
+    })
+
+    it("Should allow transferring Music NFT when ADV NFT is expired", async () => {
+        await expect(
+            advNFT.connect(otherCreator).createAdSpace(1, advNFTMetaData, advAssetHash, threeHours)
+        )
     })
 
     const advNFTMetaData2 = "testmetadata2_2"

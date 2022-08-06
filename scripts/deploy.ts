@@ -21,6 +21,22 @@ async function main() {
   console.log("ADVNft:", advNFT.address);
   console.log("MusicNFT:", musicNFT.address);
   if (hre.network.name == "localhost") {
+    const [owner, creator, randomMarketplace, randomSigner, advBuyer] = await ethers.getSigners()
+    const metaDataHash = "ipfs://QmbXvKra8Re7sxCMAEpquWJEq5qmSqis5VPCvo9uTA7AcF"
+    const assetHash = "testassetHASH"
+    await advNFT.connect(creator).setApprovalForAll(randomMarketplace.getAddress(), true)
+    await musicNFT.connect(creator).createMusic(metaDataHash, assetHash)
+    const threeHours = 3 * 24 * 60 * 60
+    const advNFTMetaData = "testmetadata"
+    const advAssetHash = "assettestmetadata"
+    await advNFT.connect(creator).createAdSpace(1, advNFTMetaData, advAssetHash, threeHours)
+    await musicNFT.connect(creator).createMusicWithAdv(metaDataHash, advAssetHash, advNFTMetaData, advAssetHash, threeHours)
+    await advNFT.connect(randomMarketplace).transferFrom(creator.getAddress(), advBuyer.getAddress(), 1)
+    const advNFTMetaData2 = "testmetadata2_2"
+    const advAssetHash2 = "hash_testmetadata2_2"
+    await ethers.provider.send("evm_increaseTime", [threeHours + 10]) // add 3 hrs 10 sec
+    await ethers.provider.send("evm_mine", [])
+    await advNFT.connect(creator).createAdSpace(1, advNFTMetaData2, advAssetHash2, threeHours)
     updateGraphAddress(advNFT.address, musicNFT.address, musicNFT.deployTransaction.blockNumber, true)
   } else {
     updateGraphAddress(advNFT.address, musicNFT.address, musicNFT.deployTransaction.blockNumber, false)

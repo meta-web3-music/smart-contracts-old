@@ -4,6 +4,7 @@ import "@openzeppelin/contracts/utils/Counters.sol";
 import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 import "@openzeppelin/contracts/token/ERC721/extensions/ERC721Burnable.sol";
 import "@openzeppelin/contracts/token/ERC721/extensions/ERC721Pausable.sol";
+import "hardhat/console.sol";
 
 contract AdvNFT is Context, ERC721Burnable, ERC721Pausable {
     using Counters for Counters.Counter;
@@ -99,17 +100,25 @@ contract AdvNFT is Context, ERC721Burnable, ERC721Pausable {
         _;
     }
 
-    modifier onlyExpired(uint256 musicTokenId) {
+    function isExpired(uint256 musicTokenId) public view returns (bool) {
         uint256 advNftId = _musicIdToAdvId[musicTokenId];
         AdvNft memory advNft = _advIdToAdv[advNftId];
-        require(
-            // expiration time is 0 when it is not transferred and therefore not used yet
-            // expiration duration is 0 only when the mapping is null since we don't allow duration 0
-            advNft.expirationDuration == 0 ||
-                (advNft.expirationTime != 0 &&
-                    block.timestamp > advNft.expirationTime),
-            "Adspace is not expired yet"
-        );
+        // expiration duration is 0 only when the mapping is null since we don't allow duration 0
+        bool isAdvNotExistYet = advNft.expirationDuration == 0;
+        if (isAdvNotExistYet) {
+            return true;
+        }
+        // expiration time is 0 when it is not transferred and therefore not used yet
+        bool hasNotBeenInUse = advNft.expirationTime == 0;
+
+        if (hasNotBeenInUse) {
+            return false;
+        }
+        return block.timestamp > advNft.expirationTime;
+    }
+
+    modifier onlyExpired(uint256 musicTokenId) {
+        require(isExpired(musicTokenId), "Adspace is not expired yet");
         _;
     }
 
@@ -172,9 +181,7 @@ contract AdvNFT is Context, ERC721Burnable, ERC721Pausable {
         _tokenIdTracker.increment();
         uint256 currentTokenID = _tokenIdTracker.current();
         _safeMint(owner, currentTokenID);
-
         _musicIdToAdvId[musicNFTId] = currentTokenID;
-
         _advIdToAdv[currentTokenID].metaDataHash = metadataHash;
         _advIdToAdv[currentTokenID].assetHash = assetHash;
         _advIdToAdv[currentTokenID].creator = owner;
@@ -198,8 +205,8 @@ contract AdvNFT is Context, ERC721Burnable, ERC721Pausable {
         returns (string memory)
     {
         uint256 advNFTid = _musicIdToAdvId[musicNFTId];
-        AdvNft memory advNFT = _advIdToAdv[advNFTid];
-        require(block.timestamp <= advNFT.expirationTime, "AdvNFT has expired");
+        bool isExpiredRes = isExpired(musicNFTId);
+        require(!isExpiredRes, "AdvNFT has expired");
         return tokenMetadataURI(advNFTid);
     }
 
@@ -262,6 +269,7 @@ contract AdvNFT is Context, ERC721Burnable, ERC721Pausable {
         }
 
         AdvNft memory advNft = _advIdToAdv[tokenId];
+
         // Expire the token if it is being burn
         if (to == address(0)) {
             if (advNft.expirationTime > block.timestamp) {

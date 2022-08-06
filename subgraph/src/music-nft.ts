@@ -11,13 +11,12 @@ const tokenUriPrefix = "ipfs://"
 function getUri(s: string): string {
   return tokenUriPrefix + s
 }
-export function handleAdvNFTCreated(event: MusicNFTCreated): void {
+export function handleMusicNFTCreated(event: MusicNFTCreated): void {
   const musicNft = new MusicNFT(event.params.tokenID.toString())
   musicNft.creator = event.params.creator.toHexString();
   musicNft.owner = event.params.creator.toHexString();
   musicNft.metaDataUri = getUri(event.params.metaDataHash);
   musicNft.assetUri = getUri(event.params.assetHash);
-  musicNft.advNfts = [];
   musicNft.save();
 }
 

@@ -15,8 +15,6 @@ dataSources:
       language: wasm/assemblyscript
       entities:
         - AdvNFTCreated
-        - Approval
-        - ApprovalForAll
         - Paused
         - Transfer
         - Unpaused
@@ -27,12 +25,8 @@ dataSources:
       eventHandlers:
         - event: AdvNFTCreated(string,string,uint256,uint32,uint256)
           handler: handleAdvNFTCreated
-        - event: Approval(indexed address,indexed address,indexed uint256)
-          handler: handleApproval
         - event: AdvNFTHashUpdated(uint256,string,string)
           handler: handleAdvNFTHashUpdated
-        - event: ApprovalForAll(indexed address,indexed address,bool)
-          handler: handleApprovalForAll
         - event: Paused(address)
           handler: handlePaused
         - event: Transfer(indexed address,indexed address,indexed uint256)
@@ -52,8 +46,6 @@ dataSources:
       apiVersion: 0.0.6
       language: wasm/assemblyscript
       entities:
-        - MusicNFTApproval
-        - MusicNFTApprovalForAll
         - MusicNFTCreated
         - MusicNFTPaused
         - Transfer
@@ -73,7 +65,7 @@ dataSources:
     source:
       address: '0xCe6cEf2A9028e1C3B21647ae3B4251038109f42a'
       abi: ZoraAsk
-      startBlock: 24358938
+      startBlock: 27485793
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.6
@@ -83,8 +75,6 @@ dataSources:
         - AskCreated
         - AskFilled
         - AskPriceUpdated
-        - ExchangeExecuted
-        - RoyaltyPayout
       abis:
         - name: ZoraAsk
           file: ./abis/ZoraAsk.json
@@ -105,12 +95,4 @@ dataSources:
             AskPriceUpdated(indexed address,indexed
             uint256,(address,address,address,uint16,uint256))
           handler: handleAskPriceUpdated
-        - event: >-
-            ExchangeExecuted(indexed address,indexed
-            address,(address,uint256,uint256),(address,uint256,uint256))
-          handler: handleExchangeExecuted
-        - event: >-
-            RoyaltyPayout(indexed address,indexed uint256,indexed
-            address,uint256)
-          handler: handleRoyaltyPayout
       file: ./src/zora-ask.ts

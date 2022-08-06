@@ -7,7 +7,7 @@
     "deploy": "graph auth --product hosted-service $GRAPH_TOKEN && graph deploy --node https://api.thegraph.com/deploy/ thisisommore/muzik",
     "create-local": "graph create --node http://localhost:8020/ thisisommore/muzik",
     "remove-local": "graph remove --node http://localhost:8020/ thisisommore/muzik",
-    "deploy-local": "graph deploy --node http://localhost:8020/ --ipfs http://localhost:5001 thisisommore/muzik",
+    "deploy-local": "graph deploy --node http://localhost:8020/ --ipfs http://localhost:5001 thisisommore/muzik subgraph.local.yaml",
     "test": "graph test"
   },
   "dependencies": {
