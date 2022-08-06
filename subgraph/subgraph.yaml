@@ -6,9 +6,9 @@ dataSources:
     name: AdvNFT
     network: mumbai
     source:
-      address: '0x1D89Ca4D52Fdc95e3b0b67fFfF9b5E735568D344'
+      address: '0xEDeb296201255F4CD25cad06bede20D1902921fB'
       abi: AdvNFT
-      startBlock: 27485793
+      startBlock: 27494506
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.6
@@ -38,9 +38,9 @@ dataSources:
     name: MusicNFT
     network: mumbai
     source:
-      address: '0x37F70d5c76309FE76B2Cc8a1A78E78ff415bC139'
+      address: '0xC715aEeD45eE6fE9e712F149aCc010b7A7EC4FBd'
       abi: MusicNFT
-      startBlock: 27485795
+      startBlock: 27494508
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.6
@@ -65,7 +65,7 @@ dataSources:
     source:
       address: '0xCe6cEf2A9028e1C3B21647ae3B4251038109f42a'
       abi: ZoraAsk
-      startBlock: 27485793
+      startBlock: 27494506
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.6
