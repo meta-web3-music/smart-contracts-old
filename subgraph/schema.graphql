@@ -1,0 +1,38 @@
+type MusicNFT @entity {
+  id: ID!
+  creator: User! # address
+  owner: User!
+  metaDataUri: String! # string
+  assetUri: String!
+  advNfts: [AdvNFT!]! @derivedFrom(field: "musicNFT")
+}
+
+type User @entity {
+  id: ID!
+  tokens: [MusicNFT!]! @derivedFrom(field: "owner")
+  created: [MusicNFT!]! @derivedFrom(field: "creator")
+}
+
+type AdvNFT @entity {
+  id: ID!
+  musicNFT: MusicNFT!
+  owner: User!
+  expirationTime: BigInt!
+  expirationDuration: BigInt!
+  metaDataHash: String!
+  assetHash: String!
+  asks: [Ask!]! @derivedFrom(field: "token")
+}
+
+type Ask @entity {
+  id: ID!
+  tokenContract: Bytes! # address
+  token: AdvNFT!
+  ask_seller: User! # address
+  ask_sellerFundsRecipient: User! # address
+  ask_askCurrency: Bytes! # address
+  ask_findersFeeBps: Int! # uint16
+  ask_askPrice: BigInt! # uint256
+  fullfilled: Boolean!
+  cancelled: Boolean!
+}
