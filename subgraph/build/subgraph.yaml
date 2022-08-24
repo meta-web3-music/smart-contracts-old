@@ -4,11 +4,11 @@ schema:
 dataSources:
   - kind: ethereum
     name: AdvNFT
-    network: mumbai
+    network: mainnet
     source:
-      address: "0xEDeb296201255F4CD25cad06bede20D1902921fB"
+      address: "0x062847Fa2abA76f182A2D8f5E20A26E03E5c43d6"
       abi: AdvNFT
-      startBlock: 27494506
+      startBlock: 22
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.6
@@ -36,11 +36,11 @@ dataSources:
       file: AdvNFT/AdvNFT.wasm
   - kind: ethereum
     name: MusicNFT
-    network: mumbai
+    network: mainnet
     source:
-      address: "0xC715aEeD45eE6fE9e712F149aCc010b7A7EC4FBd"
+      address: "0xdf1A4f75BEaE79d9b91F8B7Ed390B2275E6171fe"
       abi: MusicNFT
-      startBlock: 27494508
+      startBlock: 22
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.6
@@ -61,11 +61,11 @@ dataSources:
       file: MusicNFT/MusicNFT.wasm
   - kind: ethereum
     name: ZoraAsk
-    network: mumbai
+    network: mainnet
     source:
       address: "0xCe6cEf2A9028e1C3B21647ae3B4251038109f42a"
       abi: ZoraAsk
-      startBlock: 27494506
+      startBlock: 1
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.6
