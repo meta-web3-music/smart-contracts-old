@@ -21,6 +21,7 @@ export function handleMarketItemCreated(event: MarketItemCreated): void {
         marketItem.token = event.params.tokenId.toString()
         marketItem.forSale = event.params.forSale
         marketItem.price = event.params.price
+        marketItem.sold = false
         marketItem.metaDataUri = event.params.metaDataURI
         marketItem.deleted = false
         marketItem.save()
@@ -35,12 +36,14 @@ export function handleMarketItemSold(event: MarketItemSold): void {
     }
     marketItem.owner = event.params.buyer;
     marketItem.sold = true;
+    marketItem.forSale = false;
     marketItem.save()
 }
 
 export function handleMarketItemRemoved(event: MarketItemRemoved): void {
     let marketItem = MarketItem.load(event.params.itemId.toString())
     if (marketItem) {
+        marketItem.forSale = false;
         marketItem.deleted = true
         marketItem.owner = marketItem.seller;
         marketItem.save()

@@ -3,11 +3,13 @@ import yaml from "js-yaml"
 import fs from "fs"
 import hre from "hardhat"
 async function main() {
-
+  const MarketPlaceFactory = await ethers.getContractFactory("Marketplace")
+  const marketPlace = await MarketPlaceFactory.deploy(10);
+  console.log("deployment for Marketplace started, hash: ", marketPlace.deployTransaction.hash);
+  await marketPlace.deployed();
 
   const AdvNftFactory = await ethers.getContractFactory("AdvNFT");
-  const marketplaceAddr = "0x909e9efE4D87d1a6018C2065aE642b6D0447bc91"
-  const advNFT = await AdvNftFactory.deploy("AdvNFT", "ADV", marketplaceAddr);
+  const advNFT = await AdvNftFactory.deploy("AdvNFT", "ADV", marketPlace.address);
   console.log("deployment for ADV NFT started, hash: ", advNFT.deployTransaction.hash);
   await advNFT.deployed();
 
@@ -17,16 +19,11 @@ async function main() {
   console.log("deployment for MUSIC NFT started, hash: ", musicNFT.deployTransaction.hash);
   await musicNFT.deployed();
 
-  const MarketPlaceFactory = await ethers.getContractFactory("Marketplace")
-  const marketPlace = await MarketPlaceFactory.deploy(10);
-  console.log("deployment for Marketplace started, hash: ", marketPlace.deployTransaction.hash);
-  await marketPlace.deployed();
-
-
   await advNFT.setNftContractAddr(musicNFT.address).then(e => e.wait())
   console.log("ADVNft:", advNFT.address);
   console.log("MusicNFT:", musicNFT.address);
   console.log("MarketPlace:", marketPlace.address);
+
   if (hre.network.name == "localhost") {
     const [owner, creator, randomMarketplace, randomSigner, advBuyer] = await ethers.getSigners()
     const metaDataHash = "ipfs://QmbXvKra8Re7sxCMAEpquWJEq5qmSqis5VPCvo9uTA7AcF"
@@ -59,7 +56,7 @@ function updateGraphAddress(advNFTAddr: string, musicNFTAddr: string, marketPlac
   if (startBlock) {
     umlSubgraphLocal.dataSources[0].source.startBlock = startBlock
     umlSubgraphLocal.dataSources[1].source.startBlock = startBlock
-    umlSubgraphLocal.dataSources[3].source.startBlock = startBlock
+    umlSubgraphLocal.dataSources[2].source.startBlock = startBlock
   }
   fs.writeFileSync(urlSubgraphLocal, yaml.dump(umlSubgraphLocal));
 }
