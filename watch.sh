@@ -1,6 +1,6 @@
 #!/bin/bash
 task () {
-	ETHEREUM_RPC_URL="" yarn deploy:local;
+	ETHEREUM_RPC_URL="" NETWORK=localhost yarn deploy;
 	cd subgraph && yarn deploy-local -l v0.0.3 && cd -
 }
 

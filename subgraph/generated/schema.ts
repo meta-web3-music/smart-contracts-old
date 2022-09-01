@@ -223,17 +223,17 @@ export class AdvNFT extends Entity {
     this.set("assetHash", Value.fromString(value));
   }
 
-  get asks(): Array<string> {
-    let value = this.get("asks");
+  get marketItems(): Array<string> {
+    let value = this.get("marketItems");
     return value!.toStringArray();
   }
 
-  set asks(value: Array<string>) {
-    this.set("asks", Value.fromStringArray(value));
+  set marketItems(value: Array<string>) {
+    this.set("marketItems", Value.fromStringArray(value));
   }
 }
 
-export class Ask extends Entity {
+export class MarketItem extends Entity {
   constructor(id: string) {
     super();
     this.set("id", Value.fromString(id));
@@ -241,18 +241,18 @@ export class Ask extends Entity {
 
   save(): void {
     let id = this.get("id");
-    assert(id != null, "Cannot save Ask entity without an ID");
+    assert(id != null, "Cannot save MarketItem entity without an ID");
     if (id) {
       assert(
         id.kind == ValueKind.STRING,
-        `Entities of type Ask must have an ID of type String but the id '${id.displayData()}' is of type ${id.displayKind()}`
+        `Entities of type MarketItem must have an ID of type String but the id '${id.displayData()}' is of type ${id.displayKind()}`
       );
-      store.set("Ask", id.toString(), this);
+      store.set("MarketItem", id.toString(), this);
     }
   }
 
-  static load(id: string): Ask | null {
-    return changetype<Ask | null>(store.get("Ask", id));
+  static load(id: string): MarketItem | null {
+    return changetype<MarketItem | null>(store.get("MarketItem", id));
   }
 
   get id(): string {
@@ -264,13 +264,49 @@ export class Ask extends Entity {
     this.set("id", Value.fromString(value));
   }
 
-  get tokenContract(): Bytes {
-    let value = this.get("tokenContract");
+  get itemId(): BigInt {
+    let value = this.get("itemId");
+    return value!.toBigInt();
+  }
+
+  set itemId(value: BigInt) {
+    this.set("itemId", Value.fromBigInt(value));
+  }
+
+  get nftContract(): Bytes {
+    let value = this.get("nftContract");
     return value!.toBytes();
   }
 
-  set tokenContract(value: Bytes) {
-    this.set("tokenContract", Value.fromBytes(value));
+  set nftContract(value: Bytes) {
+    this.set("nftContract", Value.fromBytes(value));
+  }
+
+  get owner(): Bytes {
+    let value = this.get("owner");
+    return value!.toBytes();
+  }
+
+  set owner(value: Bytes) {
+    this.set("owner", Value.fromBytes(value));
+  }
+
+  get price(): BigInt {
+    let value = this.get("price");
+    return value!.toBigInt();
+  }
+
+  set price(value: BigInt) {
+    this.set("price", Value.fromBigInt(value));
+  }
+
+  get seller(): Bytes {
+    let value = this.get("seller");
+    return value!.toBytes();
+  }
+
+  set seller(value: Bytes) {
+    this.set("seller", Value.fromBytes(value));
   }
 
   get token(): string {
@@ -282,66 +318,48 @@ export class Ask extends Entity {
     this.set("token", Value.fromString(value));
   }
 
-  get ask_seller(): string {
-    let value = this.get("ask_seller");
-    return value!.toString();
+  get forSale(): boolean {
+    let value = this.get("forSale");
+    return value!.toBoolean();
   }
 
-  set ask_seller(value: string) {
-    this.set("ask_seller", Value.fromString(value));
+  set forSale(value: boolean) {
+    this.set("forSale", Value.fromBoolean(value));
   }
 
-  get ask_sellerFundsRecipient(): string {
-    let value = this.get("ask_sellerFundsRecipient");
-    return value!.toString();
-  }
-
-  set ask_sellerFundsRecipient(value: string) {
-    this.set("ask_sellerFundsRecipient", Value.fromString(value));
-  }
-
-  get ask_askCurrency(): Bytes {
-    let value = this.get("ask_askCurrency");
-    return value!.toBytes();
-  }
-
-  set ask_askCurrency(value: Bytes) {
-    this.set("ask_askCurrency", Value.fromBytes(value));
-  }
-
-  get ask_findersFeeBps(): i32 {
-    let value = this.get("ask_findersFeeBps");
-    return value!.toI32();
-  }
-
-  set ask_findersFeeBps(value: i32) {
-    this.set("ask_findersFeeBps", Value.fromI32(value));
-  }
-
-  get ask_askPrice(): BigInt {
-    let value = this.get("ask_askPrice");
+  get createdAtTimestamp(): BigInt {
+    let value = this.get("createdAtTimestamp");
     return value!.toBigInt();
   }
 
-  set ask_askPrice(value: BigInt) {
-    this.set("ask_askPrice", Value.fromBigInt(value));
+  set createdAtTimestamp(value: BigInt) {
+    this.set("createdAtTimestamp", Value.fromBigInt(value));
   }
 
-  get fullfilled(): boolean {
-    let value = this.get("fullfilled");
+  get metaDataUri(): string {
+    let value = this.get("metaDataUri");
+    return value!.toString();
+  }
+
+  set metaDataUri(value: string) {
+    this.set("metaDataUri", Value.fromString(value));
+  }
+
+  get sold(): boolean {
+    let value = this.get("sold");
     return value!.toBoolean();
   }
 
-  set fullfilled(value: boolean) {
-    this.set("fullfilled", Value.fromBoolean(value));
+  set sold(value: boolean) {
+    this.set("sold", Value.fromBoolean(value));
   }
 
-  get cancelled(): boolean {
-    let value = this.get("cancelled");
+  get deleted(): boolean {
+    let value = this.get("deleted");
     return value!.toBoolean();
   }
 
-  set cancelled(value: boolean) {
-    this.set("cancelled", Value.fromBoolean(value));
+  set deleted(value: boolean) {
+    this.set("deleted", Value.fromBoolean(value));
   }
 }

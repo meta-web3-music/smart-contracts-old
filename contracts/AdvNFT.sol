@@ -110,7 +110,11 @@ contract AdvNFT is Context, ERC721Burnable, ERC721Pausable {
         }
         // expiration time is 0 when it is not transferred and therefore not used yet
         bool hasNotBeenInUse = advNft.expirationTime == 0;
-
+        console.log(
+            "isExpired: hasNotBeenInUse %s, tokenid %d",
+            hasNotBeenInUse,
+            advNftId
+        );
         if (hasNotBeenInUse) {
             return false;
         }
@@ -276,6 +280,12 @@ contract AdvNFT is Context, ERC721Burnable, ERC721Pausable {
                 // Set to 1 since 0 means it is not used (transferred) yet
                 _advIdToAdv[tokenId].expirationTime = 1;
             }
+            super._beforeTokenTransfer(from, to, tokenId);
+            return;
+        }
+
+        // If the address is approved then it is possibly a marketplace therefore skip init code
+        if (isApprovedForAll(from, to) || getApproved(tokenId) == to) {
             super._beforeTokenTransfer(from, to, tokenId);
             return;
         }

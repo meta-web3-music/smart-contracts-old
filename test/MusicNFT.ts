@@ -1,16 +1,17 @@
 import { SignerWithAddress } from "@nomiclabs/hardhat-ethers/signers"
 import { expect } from "chai"
 import { ethers } from "hardhat"
-import { AdvNFT, MusicNFT } from "../typechain-types"
+import { AdvNFT, Marketplace, MusicNFT } from "../typechain-types"
 
 describe("musicNFT contract", () => {
 
-    let [owner, creator, otherCreator, randomMarketplace, randomSigner, advBuyer]: SignerWithAddress[] = new Array(5)
+    let [owner, creator, otherCreator, randomSigner, advBuyer]: SignerWithAddress[] = new Array(5)
     before(async () => {
-        [owner, creator, otherCreator, randomMarketplace, randomSigner, advBuyer] = await ethers.getSigners()
+        [owner, creator, otherCreator, randomSigner, advBuyer] = await ethers.getSigners()
     })
     let musicNFT: MusicNFT
     let advNFT: AdvNFT
+    let marketPlaceNFT: Marketplace
     const musicNftMetadata = {
         name: "MusicNFT",
         symbol: "MZK",
@@ -20,10 +21,19 @@ describe("musicNFT contract", () => {
         name: "AdvNFT",
         symbol: "ADV",
     }
+
+    const marketPlaceMetadata = {
+        platformFee: 10,
+    }
     before(async () => {
+        let marketPlaceNFTFactory = await ethers.getContractFactory("Marketplace")
         let advNFTFactory = await ethers.getContractFactory("AdvNFT")
         let musicNFTFactory = await ethers.getContractFactory("MusicNFT")
-        advNFT = await advNFTFactory.deploy(advNftMetadata.name, advNftMetadata.symbol, await randomMarketplace.getAddress())
+
+        marketPlaceNFT = await marketPlaceNFTFactory.deploy(marketPlaceMetadata.platformFee)
+        advNFT = await advNFTFactory.deploy(advNftMetadata.name,
+            advNftMetadata.symbol,
+            marketPlaceNFT.address)
         musicNFT = await musicNFTFactory.deploy(musicNftMetadata.name, musicNftMetadata.symbol, advNFT.address)
         advNFT.setNftContractAddr(musicNFT.address);
     })
@@ -97,17 +107,25 @@ describe("musicNFT contract", () => {
     })
 
     it("Should initialize duration after market sale", async () => {
-        await advNFT.connect(randomMarketplace).transferFrom(otherCreator.getAddress(), advBuyer.getAddress(), 1)
+        await expect(await marketPlaceNFT.connect(otherCreator).
+            createMarketItem(advNFT.address, 1, 10))
+            .to.emit(advNFT, "Transfer")
+            .withArgs(await otherCreator.getAddress(), marketPlaceNFT.address, 1)
+        await expect(await marketPlaceNFT.connect(advBuyer).
+            createMarketSale(advNFT.address, 1, {
+                value: 10
+            })).to.emit(advNFT, "Transfer")
+            .withArgs(marketPlaceNFT.address, await advBuyer.getAddress(), 1)
     })
 
     it("Should expire ADV NFT after specified time", async () => {
         expect(
-            await advNFT.connect(creator).getCurrentAdvAssetUri(1)
+            await advNFT.getCurrentAdvAssetUri(1)
         ).to.eq(getUri(advNFTMetaData))
         await ethers.provider.send("evm_increaseTime", [threeHours + 10]) // add 3 hrs 10 sec
         await ethers.provider.send("evm_mine", [])
         await expect(
-            advNFT.connect(creator).getCurrentAdvAssetUri(1)
+            advNFT.getCurrentAdvAssetUri(1)
         )
             .to.be.revertedWith("AdvNFT has expired")
     })

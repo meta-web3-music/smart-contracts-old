@@ -6,9 +6,9 @@ dataSources:
     name: AdvNFT
     network: mumbai
     source:
-      address: '0x13C2a78c4F1a14AeC47b6711130583957F405BdB'
+      address: '0xBCa4A48A702277C88572ca4602aA9ADe28349657'
       abi: AdvNFT
-      startBlock: 27759733
+      startBlock: 5305066
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.6
@@ -38,9 +38,9 @@ dataSources:
     name: MusicNFT
     network: mumbai
     source:
-      address: '0xa5ff6bc6BC1586aaFD675e0D0469Da954D9d76b6'
+      address: '0x1a7a2f50aff1f11A49262B92A8e0fC6e6A32f9E8'
       abi: MusicNFT
-      startBlock: 27759735
+      startBlock: 5305072
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.6
@@ -60,39 +60,32 @@ dataSources:
           handler: handleMusicNFTTransfer
       file: ./src/music-nft.ts
   - kind: ethereum
-    name: ZoraAsk
+    name: MarketPlace
     network: mumbai
     source:
-      address: '0xCe6cEf2A9028e1C3B21647ae3B4251038109f42a'
-      abi: ZoraAsk
-      startBlock: 27494506
+      address: '0xeBA0fa05020bD1525f20e128e6B6cD2a1558009e'
+      abi: MarketPlace
+      startBlock: 5305077
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.6
       language: wasm/assemblyscript
       entities:
-        - AskCanceled
-        - AskCreated
-        - AskFilled
-        - AskPriceUpdated
+        - MarketItemCreated
+        - MarketItemSold
+        - MarketItemRemoved
       abis:
-        - name: ZoraAsk
-          file: ./abis/ZoraAsk.json
+        - name: MarketPlace
+          file: ./abis/MarketPlace.json
       eventHandlers:
         - event: >-
-            AskCanceled(indexed address,indexed
-            uint256,(address,address,address,uint16,uint256))
-          handler: handleAskCanceled
+            MarketItemCreated(indexed uint256,indexed address,indexed
+            uint256,string,address,address,uint256,bool)
+          handler: handleMarketItemCreated
         - event: >-
-            AskCreated(indexed address,indexed
-            uint256,(address,address,address,uint16,uint256))
-          handler: handleAskCreated
-        - event: >-
-            AskFilled(indexed address,indexed uint256,indexed
-            address,address,(address,address,address,uint16,uint256))
-          handler: handleAskFilled
-        - event: >-
-            AskPriceUpdated(indexed address,indexed
-            uint256,(address,address,address,uint16,uint256))
-          handler: handleAskPriceUpdated
-      file: ./src/zora-ask.ts
+            MarketItemSold(indexed uint256,indexed address,indexed
+            uint256,address,uint256)
+          handler: handleMarketItemSold
+        - event: MarketItemRemoved(uint256)
+          handler: handleMarketItemRemoved
+      file: ./src/marketplace.ts

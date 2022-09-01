@@ -21,18 +21,20 @@ type AdvNFT @entity {
   expirationDuration: BigInt!
   metaDataHash: String!
   assetHash: String!
-  asks: [Ask!]! @derivedFrom(field: "token")
+  marketItems: [MarketItem!]! @derivedFrom(field: "token")
 }
 
-type Ask @entity {
+type MarketItem @entity {
   id: ID!
-  tokenContract: Bytes! # address
+  itemId: BigInt! # uint256
+  nftContract: Bytes! # address
+  owner: Bytes!
+  price: BigInt!
+  seller: Bytes!
   token: AdvNFT!
-  ask_seller: User! # address
-  ask_sellerFundsRecipient: User! # address
-  ask_askCurrency: Bytes! # address
-  ask_findersFeeBps: Int! # uint16
-  ask_askPrice: BigInt! # uint256
-  fullfilled: Boolean!
-  cancelled: Boolean!
+  forSale: Boolean!
+  createdAtTimestamp: BigInt!
+  metaDataUri: String!
+  sold: Boolean!
+  deleted: Boolean!
 }
