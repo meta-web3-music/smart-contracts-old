@@ -20,8 +20,8 @@ export function handleAdvNFTCreated(event: AdvNFTCreated): void {
     advNft.owner = musicNft.owner;
     advNft.expirationTime = BigInt.fromString("0");
     advNft.expirationDuration = event.params.expirationDuration;
-    advNft.metaDataHash = event.params.metaDataHash;
-    advNft.assetHash = event.params.assetHash;
+    advNft.metaDataHash = getUri(event.params.metaDataHash);
+    advNft.assetHash = getUri(event.params.assetHash);
     advNft.save();
   } else {
     //TODO
