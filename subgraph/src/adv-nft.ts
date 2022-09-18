@@ -21,7 +21,8 @@ export function handleAdvNFTCreated(event: AdvNFTCreated): void {
     advNft.expirationTime = BigInt.fromString("0");
     advNft.expirationDuration = event.params.expirationDuration;
     advNft.metaDataHash = getUri(event.params.metaDataHash);
-    advNft.assetHash = getUri(event.params.assetHash);
+    advNft.assetHash = ""
+    if (event.params.assetHash != "") advNft.assetHash = getUri(event.params.assetHash)
     advNft.save();
   } else {
     //TODO

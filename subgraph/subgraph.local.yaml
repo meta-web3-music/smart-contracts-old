@@ -6,9 +6,9 @@ dataSources:
     name: AdvNFT
     network: mainnet
     source:
-      address: '0xeF88D5dA6bef59dA78799f7ba16a4504e5F78c0B'
+      address: '0x79274e29b706b70c14d722760b6490B03A3dc721'
       abi: AdvNFT
-      startBlock: 47
+      startBlock: 102
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.6
@@ -38,9 +38,9 @@ dataSources:
     name: MusicNFT
     network: mainnet
     source:
-      address: '0x5e6634B1A894FF30082DF97e69f8C4acAefBCCe4'
+      address: '0x07d44C5eEf2cc5307c5c78717CD5081a701bd996'
       abi: MusicNFT
-      startBlock: 47
+      startBlock: 102
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.6
@@ -63,9 +63,9 @@ dataSources:
     name: MarketPlace
     network: mainnet
     source:
-      address: '0xE62888254B4e4434932aa062f88354EeBe49E526'
+      address: '0x79a02Bd74e0fBB1207Ce60E54df0C9768E0ab8FD'
       abi: MarketPlace
-      startBlock: 47
+      startBlock: 102
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.6
