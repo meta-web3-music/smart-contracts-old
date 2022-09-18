@@ -14,22 +14,22 @@ Music Contract - [Explorer](https://mumbai.polygonscan.com/address/0xa5ff6bc6BC1
 ```
 
 ## Evmos
-Adv Contract - [Explorer](https://evm.evmos.dev/address/0x44DF601b5CAeFfeed3cfAadb3D9dF4b42385B038)
+Adv Contract - [Explorer](https://evm.evmos.dev/address/0xED7F9873657dA47f92ef1d1E2BE3713De1e901cC)
 
 ```
-0x44DF601b5CAeFfeed3cfAadb3D9dF4b42385B038
+0xED7F9873657dA47f92ef1d1E2BE3713De1e901cC
 ```
 
-Music Contract - [Explorer](https://evm.evmos.dev/address/0x11007ff239Ea87956e380eA6f00FEa86293aa6Ac)
+Music Contract - [Explorer](https://evm.evmos.dev/address/0xd0851856D6EBbC3f13e69370A0e811f512933455)
 
 ```
-0x11007ff239Ea87956e380eA6f00FEa86293aa6Ac
+0xd0851856D6EBbC3f13e69370A0e811f512933455
 ```
 
-MarketPlace Contract - [Explorer](https://evm.evmos.dev/address/0xcA6355c6212e2CA40D4d73AEa7f82BeF97981a7C)
+MarketPlace Contract - [Explorer](https://evm.evmos.dev/address/0xFA989709E33998fD00670c07672E40b078F7035A)
 
 ```
-0xcA6355c6212e2CA40D4d73AEa7f82BeF97981a7C
+0xFA989709E33998fD00670c07672E40b078F7035A
 ```
 
 # INFO
