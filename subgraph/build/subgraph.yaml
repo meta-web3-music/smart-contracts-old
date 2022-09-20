@@ -4,11 +4,11 @@ schema:
 dataSources:
   - kind: ethereum
     name: AdvNFT
-    network: mainnet
+    network: tevmos
     source:
-      address: "0xe0c48E7018b3442810C79A0fD8E0Dd6b3a49FcB5"
+      address: "0x0b6abA80D045a29d1c720284421094eB0EF2291D"
       abi: AdvNFT
-      startBlock: 91
+      startBlock: 6245205
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.6
@@ -36,11 +36,11 @@ dataSources:
       file: AdvNFT/AdvNFT.wasm
   - kind: ethereum
     name: MusicNFT
-    network: mainnet
+    network: tevmos
     source:
-      address: "0x3eFaDa2Dc903a69dD3b503B8711D7A6b15353714"
+      address: "0x8A316d5f0b04eA495D3808Fb66144c90f2da662e"
       abi: MusicNFT
-      startBlock: 91
+      startBlock: 6245205
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.6
@@ -61,11 +61,11 @@ dataSources:
       file: MusicNFT/MusicNFT.wasm
   - kind: ethereum
     name: MarketPlace
-    network: mainnet
+    network: tevmos
     source:
-      address: "0x220B89d9007704C6F469DCC024b1169bC4a443Cb"
+      address: "0x890351b827Bd1f48e479A93dd3397C6b16b33870"
       abi: MarketPlace
-      startBlock: 91
+      startBlock: 6245205
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.6
