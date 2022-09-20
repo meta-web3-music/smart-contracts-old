@@ -33,4 +33,4 @@ MarketPlace Contract - [Explorer](https://evm.evmos.dev/address/0x652e32c2273a2D
 ```
 
 # INFO
-- Don't approve to normal addresses and unverified marketplace, only approve to verify marketplace, since in transfer if address is approved then it will not init timer of expiration
+- Don't approve to normal addresses and unverified marketplaces, only approve to verified and trusted marketplaces, since during transfer, if the address is approved then it will skip timer initiation, and the token will be valid unnecessarily
