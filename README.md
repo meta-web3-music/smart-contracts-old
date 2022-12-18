@@ -2,22 +2,22 @@
 
 ## Polygon
 
-Adv Contract - [Explorer](https://mumbai.polygonscan.com/address/0xe8d5313592e7f284d7b87270e889c9651c3a7A89#readContract)
+Adv Contract - [Explorer](https://mumbai.polygonscan.com/address/0xED7F9873657dA47f92ef1d1E2BE3713De1e901cC#readContract)
 
 ```
-0xe8d5313592e7f284d7b87270e889c9651c3a7A89
+0xED7F9873657dA47f92ef1d1E2BE3713De1e901cC
 ```
 
-Music Contract - [Explorer](https://mumbai.polygonscan.com/address/0xb06e737940b4212B9809e50Fe223Bd76bF13D99f#readContract)
+Music Contract - [Explorer](https://mumbai.polygonscan.com/address/0xd0851856D6EBbC3f13e69370A0e811f512933455#readContract)
 
 ```
-0xb06e737940b4212B9809e50Fe223Bd76bF13D99f
+0xd0851856D6EBbC3f13e69370A0e811f512933455
 ```
 
-Marketplace Contract - [Explorer](https://mumbai.polygonscan.com/address/0xD2af673b477678EfECb8169309F6AaEAab290DF1#readContract)
+Marketplace Contract - [Explorer](https://mumbai.polygonscan.com/address/0xFA989709E33998fD00670c07672E40b078F7035A#readContract)
 
 ```
-0xD2af673b477678EfECb8169309F6AaEAab290DF1
+0xFA989709E33998fD00670c07672E40b078F7035A
 ```
 
 ## Evmos

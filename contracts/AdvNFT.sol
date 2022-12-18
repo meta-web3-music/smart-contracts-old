@@ -41,7 +41,7 @@ contract AdvNFT is Context, ERC721Burnable, ERC721Pausable {
         uint256 musicNFTId
     );
 
-    event AdvNFTHashUpdated(uint256 tokenId, string metaHash, string assetHash);
+    event AdvNFTHashUpdated(uint256 tokenId, string metaDataHash);
 
     using Strings for uint256;
 
@@ -247,17 +247,15 @@ contract AdvNFT is Context, ERC721Burnable, ERC721Pausable {
         _unpause();
     }
 
-    function updateHash(
-        uint256 tokenId,
-        string memory _metaDataHash,
-        string memory _dataHash
-    ) external {
+    function updateMetaDataHash(uint256 tokenId, string memory _metaDataHash)
+        external
+    {
         require(
             _isApprovedOrOwner(_msgSender(), tokenId),
             "sender is not approved nor owner of token"
         );
         _advIdToAdv[tokenId].metaDataHash = _metaDataHash;
-        emit AdvNFTHashUpdated(tokenId, _metaDataHash, _dataHash);
+        emit AdvNFTHashUpdated(tokenId, _metaDataHash);
     }
 
     //Some checks to avoid token being transfer to other marketplace where it is not possible to detect sale and therefore not possible to initilize expirationTime

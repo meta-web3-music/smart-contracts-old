@@ -33,8 +33,7 @@ export function handleAdvNFTCreated(event: AdvNFTCreated): void {
 export function handleAdvNFTHashUpdated(event: AdvNFTHashUpdated): void {
   const advNft = AdvNFT.load(event.params.tokenId.toString())
   if (advNft) {
-    advNft.metaDataHash = getUri(event.params.metaHash);
-    advNft.assetHash = getUri(event.params.assetHash);
+    advNft.metaDataHash = getUri(event.params.metaDataHash);
     advNft.save();
   } else {
     //TODO

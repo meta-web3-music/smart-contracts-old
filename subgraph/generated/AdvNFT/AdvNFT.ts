@@ -61,12 +61,8 @@ export class AdvNFTHashUpdated__Params {
     return this._event.parameters[0].value.toBigInt();
   }
 
-  get metaHash(): string {
+  get metaDataHash(): string {
     return this._event.parameters[1].value.toString();
-  }
-
-  get assetHash(): string {
-    return this._event.parameters[2].value.toString();
   }
 }
 
@@ -376,6 +372,25 @@ export class AdvNFT extends ethereum.SmartContract {
       "isApprovedForAll(address,address):(bool)",
       [ethereum.Value.fromAddress(owner), ethereum.Value.fromAddress(operator)]
     );
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(value[0].toBoolean());
+  }
+
+  isExpired(musicTokenId: BigInt): boolean {
+    let result = super.call("isExpired", "isExpired(uint256):(bool)", [
+      ethereum.Value.fromUnsignedBigInt(musicTokenId)
+    ]);
+
+    return result[0].toBoolean();
+  }
+
+  try_isExpired(musicTokenId: BigInt): ethereum.CallResult<boolean> {
+    let result = super.tryCall("isExpired", "isExpired(uint256):(bool)", [
+      ethereum.Value.fromUnsignedBigInt(musicTokenId)
+    ]);
     if (result.reverted) {
       return new ethereum.CallResult();
     }
@@ -991,20 +1006,20 @@ export class UnpauseCall__Outputs {
   }
 }
 
-export class UpdateHashCall extends ethereum.Call {
-  get inputs(): UpdateHashCall__Inputs {
-    return new UpdateHashCall__Inputs(this);
+export class UpdateMetaDataHashCall extends ethereum.Call {
+  get inputs(): UpdateMetaDataHashCall__Inputs {
+    return new UpdateMetaDataHashCall__Inputs(this);
   }
 
-  get outputs(): UpdateHashCall__Outputs {
-    return new UpdateHashCall__Outputs(this);
+  get outputs(): UpdateMetaDataHashCall__Outputs {
+    return new UpdateMetaDataHashCall__Outputs(this);
   }
 }
 
-export class UpdateHashCall__Inputs {
-  _call: UpdateHashCall;
+export class UpdateMetaDataHashCall__Inputs {
+  _call: UpdateMetaDataHashCall;
 
-  constructor(call: UpdateHashCall) {
+  constructor(call: UpdateMetaDataHashCall) {
     this._call = call;
   }
 
@@ -1015,16 +1030,12 @@ export class UpdateHashCall__Inputs {
   get _metaDataHash(): string {
     return this._call.inputValues[1].value.toString();
   }
-
-  get _dataHash(): string {
-    return this._call.inputValues[2].value.toString();
-  }
 }
 
-export class UpdateHashCall__Outputs {
-  _call: UpdateHashCall;
+export class UpdateMetaDataHashCall__Outputs {
+  _call: UpdateMetaDataHashCall;
 
-  constructor(call: UpdateHashCall) {
+  constructor(call: UpdateMetaDataHashCall) {
     this._call = call;
   }
 }
