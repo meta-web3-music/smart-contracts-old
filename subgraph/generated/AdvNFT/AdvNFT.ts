@@ -10,6 +10,28 @@ import {
   BigInt
 } from "@graphprotocol/graph-ts";
 
+export class AdvNFTAssetHashUpdated extends ethereum.Event {
+  get params(): AdvNFTAssetHashUpdated__Params {
+    return new AdvNFTAssetHashUpdated__Params(this);
+  }
+}
+
+export class AdvNFTAssetHashUpdated__Params {
+  _event: AdvNFTAssetHashUpdated;
+
+  constructor(event: AdvNFTAssetHashUpdated) {
+    this._event = event;
+  }
+
+  get tokenId(): BigInt {
+    return this._event.parameters[0].value.toBigInt();
+  }
+
+  get assetHash(): string {
+    return this._event.parameters[1].value.toString();
+  }
+}
+
 export class AdvNFTCreated extends ethereum.Event {
   get params(): AdvNFTCreated__Params {
     return new AdvNFTCreated__Params(this);
@@ -44,16 +66,16 @@ export class AdvNFTCreated__Params {
   }
 }
 
-export class AdvNFTHashUpdated extends ethereum.Event {
-  get params(): AdvNFTHashUpdated__Params {
-    return new AdvNFTHashUpdated__Params(this);
+export class AdvNFTMetaDataHashUpdated extends ethereum.Event {
+  get params(): AdvNFTMetaDataHashUpdated__Params {
+    return new AdvNFTMetaDataHashUpdated__Params(this);
   }
 }
 
-export class AdvNFTHashUpdated__Params {
-  _event: AdvNFTHashUpdated;
+export class AdvNFTMetaDataHashUpdated__Params {
+  _event: AdvNFTMetaDataHashUpdated;
 
-  constructor(event: AdvNFTHashUpdated) {
+  constructor(event: AdvNFTMetaDataHashUpdated) {
     this._event = event;
   }
 
@@ -1002,6 +1024,78 @@ export class UnpauseCall__Outputs {
   _call: UnpauseCall;
 
   constructor(call: UnpauseCall) {
+    this._call = call;
+  }
+}
+
+export class UpdateAssetHashCall extends ethereum.Call {
+  get inputs(): UpdateAssetHashCall__Inputs {
+    return new UpdateAssetHashCall__Inputs(this);
+  }
+
+  get outputs(): UpdateAssetHashCall__Outputs {
+    return new UpdateAssetHashCall__Outputs(this);
+  }
+}
+
+export class UpdateAssetHashCall__Inputs {
+  _call: UpdateAssetHashCall;
+
+  constructor(call: UpdateAssetHashCall) {
+    this._call = call;
+  }
+
+  get tokenId(): BigInt {
+    return this._call.inputValues[0].value.toBigInt();
+  }
+
+  get _assetHash(): string {
+    return this._call.inputValues[1].value.toString();
+  }
+}
+
+export class UpdateAssetHashCall__Outputs {
+  _call: UpdateAssetHashCall;
+
+  constructor(call: UpdateAssetHashCall) {
+    this._call = call;
+  }
+}
+
+export class UpdateHashCall extends ethereum.Call {
+  get inputs(): UpdateHashCall__Inputs {
+    return new UpdateHashCall__Inputs(this);
+  }
+
+  get outputs(): UpdateHashCall__Outputs {
+    return new UpdateHashCall__Outputs(this);
+  }
+}
+
+export class UpdateHashCall__Inputs {
+  _call: UpdateHashCall;
+
+  constructor(call: UpdateHashCall) {
+    this._call = call;
+  }
+
+  get tokenId(): BigInt {
+    return this._call.inputValues[0].value.toBigInt();
+  }
+
+  get _assetHash(): string {
+    return this._call.inputValues[1].value.toString();
+  }
+
+  get _metaDataHash(): string {
+    return this._call.inputValues[2].value.toString();
+  }
+}
+
+export class UpdateHashCall__Outputs {
+  _call: UpdateHashCall;
+
+  constructor(call: UpdateHashCall) {
     this._call = call;
   }
 }

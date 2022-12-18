@@ -2,7 +2,8 @@ import { BigInt } from "@graphprotocol/graph-ts"
 import {
   AdvNFTCreated,
   Transfer,
-  AdvNFTHashUpdated
+  AdvNFTAssetHashUpdated,
+  AdvNFTMetaDataHashUpdated
 } from "../generated/AdvNFT/AdvNFT"
 import { AdvNFT, MusicNFT, User } from "../generated/schema"
 
@@ -30,10 +31,20 @@ export function handleAdvNFTCreated(event: AdvNFTCreated): void {
 
 }
 
-export function handleAdvNFTHashUpdated(event: AdvNFTHashUpdated): void {
+export function handleAdvNFTMetaDataHashUpdated(event: AdvNFTMetaDataHashUpdated): void {
   const advNft = AdvNFT.load(event.params.tokenId.toString())
   if (advNft) {
     advNft.metaDataHash = getUri(event.params.metaDataHash);
+    advNft.save();
+  } else {
+    //TODO
+  }
+}
+
+export function handleAdvNFTAssetHashUpdated(event: AdvNFTAssetHashUpdated): void {
+  const advNft = AdvNFT.load(event.params.tokenId.toString())
+  if (advNft) {
+    advNft.assetHash = getUri(event.params.assetHash);
     advNft.save();
   } else {
     //TODO
