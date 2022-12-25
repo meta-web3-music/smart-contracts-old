@@ -12,6 +12,7 @@ export function handleMarketItemCreated(event: MarketItemCreated): void {
         marketItem.createdAtTimestamp = event.block.timestamp
     }
 
+    //Assuming only sales happen for ad contract
     let token = AdvNFT.load(event.params.tokenId.toString())
     if (token) {
         marketItem.itemId = event.params.itemId
@@ -24,6 +25,8 @@ export function handleMarketItemCreated(event: MarketItemCreated): void {
         marketItem.sold = false
         marketItem.metaDataUri = event.params.metaDataURI
         marketItem.deleted = false
+        token.listed = true;
+        token.save()
         marketItem.save()
     }
 
@@ -34,6 +37,15 @@ export function handleMarketItemSold(event: MarketItemSold): void {
     if (!marketItem) {
         marketItem = new MarketItem(event.params.itemId.toString());
     }
+
+    //Assuming only sales happen for ad contract
+    let token = AdvNFT.load(event.params.tokenId.toString())
+    if (token) {
+        token.listed = false;
+        token.save()
+        marketItem.save()
+    }
+
     marketItem.owner = event.params.buyer;
     marketItem.sold = true;
     marketItem.forSale = false;
