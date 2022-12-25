@@ -21,6 +21,7 @@ type AdvNFT @entity {
   expirationDuration: BigInt!
   metaDataHash: String!
   assetHash: String!
+  listed: Boolean!
   marketItems: [MarketItem!]! @derivedFrom(field: "token")
 }
 

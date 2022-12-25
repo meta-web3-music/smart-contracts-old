@@ -223,6 +223,15 @@ export class AdvNFT extends Entity {
     this.set("assetHash", Value.fromString(value));
   }
 
+  get listed(): boolean {
+    let value = this.get("listed");
+    return value!.toBoolean();
+  }
+
+  set listed(value: boolean) {
+    this.set("listed", Value.fromBoolean(value));
+  }
+
   get marketItems(): Array<string> {
     let value = this.get("marketItems");
     return value!.toStringArray();

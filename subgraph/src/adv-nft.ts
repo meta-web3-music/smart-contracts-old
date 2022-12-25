@@ -5,6 +5,7 @@ import {
   AdvNFTAssetHashUpdated,
   AdvNFTMetaDataHashUpdated
 } from "../generated/AdvNFT/AdvNFT"
+import { MarketPlaceAddr } from "../env"
 import { AdvNFT, MusicNFT, User } from "../generated/schema"
 
 
@@ -21,6 +22,7 @@ export function handleAdvNFTCreated(event: AdvNFTCreated): void {
     advNft.owner = musicNft.owner;
     advNft.expirationTime = BigInt.fromString("0");
     advNft.expirationDuration = event.params.expirationDuration;
+    advNft.listed = false;
     advNft.metaDataHash = getUri(event.params.metaDataHash);
     advNft.assetHash = ""
     if (event.params.assetHash != "") advNft.assetHash = getUri(event.params.assetHash)
@@ -55,8 +57,10 @@ export function handleTransfer(event: Transfer): void {
   const user = new User(event.params.to.toHexString())
   const advNft = AdvNFT.load(event.params.tokenId.toString())
   if (advNft) {
+    if (event.params.to.toHexString() != MarketPlaceAddr) {
+      advNft.expirationTime = event.block.timestamp.plus(BigInt.fromString(advNft.expirationDuration.toString()));
+    }
     advNft.owner = event.params.to.toHexString();
-    advNft.expirationTime = event.block.timestamp.plus(BigInt.fromString(advNft.expirationDuration.toString()));
     user.save();
     advNft.save();
   } else {
