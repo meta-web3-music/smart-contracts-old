@@ -48,10 +48,13 @@ async function main() {
 }
 function updateGraphAddress(advNFTAddr: string, musicNFTAddr: string, marketPlaceAddr: string, startBlock: number | undefined, local: boolean) {
   const urlSubgraphLocal = local ? `subgraph/subgraph.local.yaml` : `subgraph/subgraph.yaml`
-  const umlSubgraphLocal = yaml.load(fs.readFileSync(urlSubgraphLocal, 'utf8')) as any
+  const umlSubgraphLocal = yaml.load(fs.readFileSync("subgraph/subgraph.yaml", 'utf8')) as any
   umlSubgraphLocal.dataSources[0].source.address = advNFTAddr
+  umlSubgraphLocal.dataSources[0].network = "mainnet"
   umlSubgraphLocal.dataSources[1].source.address = musicNFTAddr
+  umlSubgraphLocal.dataSources[1].network = "mainnet"
   umlSubgraphLocal.dataSources[2].source.address = marketPlaceAddr
+  umlSubgraphLocal.dataSources[2].network = "mainnet"
 
   if (startBlock) {
     umlSubgraphLocal.dataSources[0].source.startBlock = startBlock

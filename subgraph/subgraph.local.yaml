@@ -6,9 +6,9 @@ dataSources:
     name: AdvNFT
     network: mainnet
     source:
-      address: '0xe8d5313592e7f284d7b87270e889c9651c3a7A89'
+      address: '0xED7F9873657dA47f92ef1d1E2BE3713De1e901cC'
       abi: AdvNFT
-      startBlock: 3
+      startBlock: 14
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.6
@@ -25,8 +25,10 @@ dataSources:
       eventHandlers:
         - event: AdvNFTCreated(string,string,uint256,uint32,uint256)
           handler: handleAdvNFTCreated
-        - event: AdvNFTHashUpdated(uint256,string)
-          handler: handleAdvNFTHashUpdated
+        - event: AdvNFTMetaDataHashUpdated(uint256,string)
+          handler: handleAdvNFTMetaDataHashUpdated
+        - event: AdvNFTAssetHashUpdated(uint256,string)
+          handler: handleAdvNFTAssetHashUpdated
         - event: Paused(address)
           handler: handlePaused
         - event: Transfer(indexed address,indexed address,indexed uint256)
@@ -38,9 +40,9 @@ dataSources:
     name: MusicNFT
     network: mainnet
     source:
-      address: '0xb06e737940b4212B9809e50Fe223Bd76bF13D99f'
+      address: '0xd0851856D6EBbC3f13e69370A0e811f512933455'
       abi: MusicNFT
-      startBlock: 3
+      startBlock: 14
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.6
@@ -63,9 +65,9 @@ dataSources:
     name: MarketPlace
     network: mainnet
     source:
-      address: '0xD2af673b477678EfECb8169309F6AaEAab290DF1'
+      address: '0xFA989709E33998fD00670c07672E40b078F7035A'
       abi: MarketPlace
-      startBlock: 3
+      startBlock: 14
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.6
