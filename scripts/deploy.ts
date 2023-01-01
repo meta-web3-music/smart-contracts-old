@@ -26,8 +26,8 @@ async function main() {
 
   if (hre.network.name == "localhost") {
     const [owner, creator, randomMarketplace, randomSigner, advBuyer] = await ethers.getSigners()
-    const metaDataHash = "ipfs://QmbXvKra8Re7sxCMAEpquWJEq5qmSqis5VPCvo9uTA7AcF"
-    const assetHash = "testassetHASH"
+    const metaDataHash = "bafkreifx3cucvy3juks7qh6mr2ljimqvqjrxcuvxi3j75geawbslikn2ae"
+    const assetHash = "bafkreifezhyuug7nluru4duojwhsqrkfwkqg4lcylfgayq6hadn5c4uja4"
     await advNFT.connect(creator).setApprovalForAll(randomMarketplace.getAddress(), true)
     await musicNFT.connect(creator).createMusic(metaDataHash, assetHash)
     const threeHours = 3 * 24 * 60 * 60

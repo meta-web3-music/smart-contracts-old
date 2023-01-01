@@ -1,14 +1,16 @@
 specVersion: 0.0.4
 schema:
   file: ./schema.graphql
+features:
+  - ipfsOnEthereumContracts
 dataSources:
   - kind: ethereum
     name: AdvNFT
     network: mainnet
     source:
-      address: '0xED7F9873657dA47f92ef1d1E2BE3713De1e901cC'
+      address: '0xc7B63450Cc099dB74D7f3B393e93cDe921319A1a'
       abi: AdvNFT
-      startBlock: 14
+      startBlock: 168
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.6
@@ -40,9 +42,9 @@ dataSources:
     name: MusicNFT
     network: mainnet
     source:
-      address: '0xd0851856D6EBbC3f13e69370A0e811f512933455'
+      address: '0x368750E5dA5fa98a21a121fcE2F4792329d3A70e'
       abi: MusicNFT
-      startBlock: 14
+      startBlock: 168
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.6
@@ -65,9 +67,9 @@ dataSources:
     name: MarketPlace
     network: mainnet
     source:
-      address: '0xFA989709E33998fD00670c07672E40b078F7035A'
+      address: '0x9746eE1e02832e37639Fe9924f36c8182878064d'
       abi: MarketPlace
-      startBlock: 14
+      startBlock: 168
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.6

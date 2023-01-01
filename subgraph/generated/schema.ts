@@ -33,6 +33,15 @@ export class MusicNFT extends Entity {
     return changetype<MusicNFT | null>(store.get("MusicNFT", id));
   }
 
+  get title(): string {
+    let value = this.get("title");
+    return value!.toString();
+  }
+
+  set title(value: string) {
+    this.set("title", Value.fromString(value));
+  }
+
   get id(): string {
     let value = this.get("id");
     return value!.toString();

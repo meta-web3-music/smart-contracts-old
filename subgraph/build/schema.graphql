@@ -1,4 +1,5 @@
 type MusicNFT @entity {
+  title: String!
   id: ID!
   creator: User! # address
   owner: User!

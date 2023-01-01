@@ -1,3 +1,4 @@
+import { ipfs, JSONValue, Value } from '@graphprotocol/graph-ts'
 import { BigInt } from "@graphprotocol/graph-ts"
 import {
   AdvNFTCreated,
@@ -14,8 +15,10 @@ const tokenUriPrefix = "ipfs://"
 function getUri(s: string): string {
   return tokenUriPrefix + s
 }
+
 export function handleAdvNFTCreated(event: AdvNFTCreated): void {
   let musicNft = MusicNFT.load(event.params.tokenID.toString())
+  event.params.metaDataHash
   if (musicNft) {
     const advNft = new AdvNFT(event.params.tokenID.toString())
     advNft.musicNFT = event.params.musicNFTId.toString();

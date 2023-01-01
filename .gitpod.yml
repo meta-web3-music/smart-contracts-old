@@ -16,22 +16,20 @@ tasks:
     command: ganache-cli -h 0.0.0.0 -m "$MNEMONIC"
   - name: Graph Node
     command: |
-      cd /home/gitpod/graph-docker/graph-node/docker
-      docker-compose up -d
-      sleep 10
-      gp sync-done graphnode
+      cd /home/gitpod/graph-docker/
+      docker-compose up
   - name: Create deploy
     command: |
       gp sync-await depinit
-      gp sync-await graphnode
-      gp await-port 8020
+      sleep 10
+      gp ports await 8020
       cd subgraph && yarn create-local && cd -
       gp sync-done graphdeploy
   - name: Smart contract
     command: |
       gp sync-await depinit
       gp sync-await graphdeploy
-      gp sync-await graphnode
+      sleep 10
       gp await-port 8020
       ./watch.sh
 
