@@ -23,6 +23,7 @@ tasks:
       gp sync-await depinit
       sleep 10
       gp ports await 8020
+      sleep 5
       cd subgraph && yarn create-local && cd -
       gp sync-done graphdeploy
   - name: Smart contract
@@ -31,6 +32,7 @@ tasks:
       gp sync-await graphdeploy
       sleep 10
       gp await-port 8020
+      sleep 5
       ./watch.sh
 
 vscode:
