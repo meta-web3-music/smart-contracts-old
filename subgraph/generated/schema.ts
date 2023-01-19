@@ -95,6 +95,23 @@ export class MusicNFT extends Entity {
   set advNfts(value: Array<string>) {
     this.set("advNfts", Value.fromStringArray(value));
   }
+
+  get latestAdvNft(): string | null {
+    let value = this.get("latestAdvNft");
+    if (!value || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toString();
+    }
+  }
+
+  set latestAdvNft(value: string | null) {
+    if (!value) {
+      this.unset("latestAdvNft");
+    } else {
+      this.set("latestAdvNft", Value.fromString(<string>value));
+    }
+  }
 }
 
 export class User extends Entity {
@@ -248,6 +265,15 @@ export class AdvNFT extends Entity {
 
   set marketItems(value: Array<string>) {
     this.set("marketItems", Value.fromStringArray(value));
+  }
+
+  get latest(): boolean {
+    let value = this.get("latest");
+    return value!.toBoolean();
+  }
+
+  set latest(value: boolean) {
+    this.set("latest", Value.fromBoolean(value));
   }
 }
 

@@ -17,8 +17,7 @@ function getUri(s: string): string {
 }
 
 export function handleAdvNFTCreated(event: AdvNFTCreated): void {
-  let musicNft = MusicNFT.load(event.params.tokenID.toString())
-  event.params.metaDataHash
+  let musicNft = MusicNFT.load(event.params.musicNFTId.toString())
   if (musicNft) {
     const advNft = new AdvNFT(event.params.tokenID.toString())
     advNft.musicNFT = event.params.musicNFTId.toString();
@@ -28,8 +27,18 @@ export function handleAdvNFTCreated(event: AdvNFTCreated): void {
     advNft.listed = false;
     advNft.metaDataHash = getUri(event.params.metaDataHash);
     advNft.assetHash = ""
+    advNft.latest = true
+    if (musicNft.latestAdvNft) {
+      const oldAdvNft = AdvNFT.load(musicNft.latestAdvNft as string)
+      if (oldAdvNft) {
+        oldAdvNft.latest = false
+        oldAdvNft.save()
+      }
+    }
+    musicNft.latestAdvNft = event.params.tokenID.toString()
     if (event.params.assetHash != "") advNft.assetHash = getUri(event.params.assetHash)
     advNft.save();
+    musicNft.save();
   } else {
     //TODO
   }

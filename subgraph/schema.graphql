@@ -6,6 +6,7 @@ type MusicNFT @entity {
   metaDataUri: String! # string
   assetUri: String!
   advNfts: [AdvNFT!]! @derivedFrom(field: "musicNFT")
+  latestAdvNft: AdvNFT
 }
 
 type User @entity {
@@ -24,6 +25,7 @@ type AdvNFT @entity {
   assetHash: String!
   listed: Boolean!
   marketItems: [MarketItem!]! @derivedFrom(field: "token")
+  latest: Boolean!
 }
 
 type MarketItem @entity {
