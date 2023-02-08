@@ -47,6 +47,12 @@ MarketPlace Contract - [Explorer](https://evm.evmos.dev/address/0x652e32c2273a2D
 # Important functions
 
 ```solidity
+    // Creates music
+    function createMusic(string memory metadataHash, string memory assetHash)
+        public
+        returns (uint256)
+```
+```solidity
     // Calls internal _createAdSpace
     function createAdSpace(
         uint256 musicNFTId,
