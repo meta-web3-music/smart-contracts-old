@@ -127,6 +127,7 @@ contract AdvNFT is Context, ERC721Burnable, ERC721Pausable {
         _;
     }
 
+    // Calls internal _createAdSpace
     function createAdSpace(
         uint256 musicNFTId,
         string memory metadataHash,
@@ -143,6 +144,7 @@ contract AdvNFT is Context, ERC721Burnable, ERC721Pausable {
             );
     }
 
+    // Calls internal _createAdSpace while checking if the called in
     function _musicNFTCreateAdSpace(
         address owner,
         uint256 musicNFTId,
@@ -160,6 +162,7 @@ contract AdvNFT is Context, ERC721Burnable, ERC721Pausable {
             );
     }
 
+    // Creates ad space
     function _createAdSpace(
         address owner,
         uint256 musicNFTId,
@@ -204,6 +207,7 @@ contract AdvNFT is Context, ERC721Burnable, ERC721Pausable {
         return currentTokenID;
     }
 
+    // If the adv is not expired then returns metadata uri
     function getCurrentAdvAssetUri(uint256 musicNFTId)
         external
         view
@@ -227,6 +231,7 @@ contract AdvNFT is Context, ERC721Burnable, ERC721Pausable {
         return string(ipfsPrefixed);
     }
 
+    // Returns token uri
     function tokenURI(uint256 tokenId)
         public
         view
@@ -248,6 +253,7 @@ contract AdvNFT is Context, ERC721Burnable, ERC721Pausable {
         _unpause();
     }
 
+    // Updates metadata hash
     function updateMetaDataHash(uint256 tokenId, string memory _metaDataHash)
         external
     {
@@ -259,6 +265,7 @@ contract AdvNFT is Context, ERC721Burnable, ERC721Pausable {
         emit AdvNFTMetaDataHashUpdated(tokenId, _metaDataHash);
     }
 
+    // Updates asset hash
     function updateAssetHash(uint256 tokenId, string memory _assetHash)
         external
     {
@@ -270,6 +277,7 @@ contract AdvNFT is Context, ERC721Burnable, ERC721Pausable {
         emit AdvNFTAssetHashUpdated(tokenId, _assetHash);
     }
 
+    // Updates both asset hash and metdata hash
     function updateHash(
         uint256 tokenId,
         string memory _assetHash,

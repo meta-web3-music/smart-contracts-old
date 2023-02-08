@@ -48,6 +48,7 @@ contract MusicNFT is Context, ERC721Pausable {
         _;
     }
 
+    // Creates music
     function createMusic(string memory metadataHash, string memory assetHash)
         public
         returns (uint256)
@@ -66,6 +67,7 @@ contract MusicNFT is Context, ERC721Pausable {
         return currentTokenID;
     }
 
+    // Creates music with adv nft
     function createMusicWithAdv(
         string memory musicMetadataHash,
         string memory musicAssetHash,
@@ -129,6 +131,7 @@ contract MusicNFT is Context, ERC721Pausable {
         _unpause();
     }
 
+    // Used to prevent music with active advertisements for being transferred this prevents actions such as burn
     function _beforeTokenTransfer(
         address from,
         address to,

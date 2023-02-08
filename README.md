@@ -43,3 +43,76 @@ MarketPlace Contract - [Explorer](https://evm.evmos.dev/address/0x652e32c2273a2D
 # INFO
 
 - Don't approve to normal addresses and unverified marketplaces, only approve to verified and trusted marketplaces, since during transfer, if the address is approved then it will skip timer initiation, and the token will be valid unnecessarily
+
+# Important functions
+
+```solidity
+    // Calls internal _createAdSpace
+    function createAdSpace(
+        uint256 musicNFTId,
+        string memory metadataHash,
+        string memory assetHash,
+        uint32 expirationDuration
+    )
+```
+
+```solidity
+    // Calls internal _createAdSpace while checking if the called in
+    function _musicNFTCreateAdSpace(
+        address owner,
+        uint256 musicNFTId,
+        string memory metadataHash,
+        string memory assetHash,
+        uint32 expirationDuration
+    )
+```
+
+```solidity
+    // Creates ad space
+    function _createAdSpace(
+        address owner,
+        uint256 musicNFTId,
+        string memory metadataHash,
+        string memory assetHash,
+        uint32 _expirationDuration
+    )
+```
+
+```solidity
+    // If the adv is not expired then returns metadata uri
+    function getCurrentAdvAssetUri(uint256 musicNFTId)
+        external
+        view
+        returns (string memory)
+```
+
+```solidity
+    // Returns token uri
+    function tokenURI(uint256 tokenId)
+        public
+        view
+        virtual
+        override
+        returns (string memory)
+```
+
+```solidity
+    // Updates metadata hash
+    function updateMetaDataHash(uint256 tokenId, string memory _metaDataHash)
+        external
+```
+
+```solidity
+    // Updates asset hash
+    function updateAssetHash(uint256 tokenId, string memory _assetHash)
+        external
+```
+
+```solidity
+    // Updates both asset hash and metdata hash
+    function updateHash(
+        uint256 tokenId,
+        string memory _assetHash,
+        string memory _metaDataHash
+    )
+```

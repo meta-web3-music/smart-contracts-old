@@ -79,7 +79,7 @@ contract Marketplace is Context, AccessControlEnumerable, ReentrancyGuard {
     }
 
     // Only when item is is for sale
-    modifier onlyWhenItemIsForSale(uint256 itemId){
+    modifier onlyWhenItemIsForSale(uint256 itemId) {
         require(
             idToMarketItem[itemId].forSale == true,
             "Marketplace: Market item is not for sale"
@@ -96,9 +96,7 @@ contract Marketplace is Context, AccessControlEnumerable, ReentrancyGuard {
         _;
     }
 
-    /*  Places an item for sale on the marketplace
-        Accepts price in native asset of the blockchain network
-    */
+    // Creates market item, mainly used for adv nft
     function createMarketItem(
         address nftContract,
         uint256 tokenId,
